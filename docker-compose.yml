@@ -1,0 +1,53 @@
+﻿version: '2'
+
+services:
+
+  web:
+    container_name: 'aspnetcoreapp'
+    build:
+      context: .
+      dockerfile: app.dockerfile
+    ports:
+     - "80:80"
+    image: aspnetcoreapp
+    depends_on:
+     - "sqlserverlinux"
+     - "api"
+    networks:
+      - aspnetcoreapp-network
+    links:
+      - "api:apiservice"
+
+  sqlserverlinux:
+    container_name: 'sqlserverlinux'
+    ports:
+      - "1433:1433"
+    image: microsoft/mssql-server-linux
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrong(!)Password123
+    volumes:
+      - /var/opt/mssql:/var/opt/mssql
+    networks:
+      - aspnetcoreapp-network
+
+  api:
+    container_name: 'aspnetcoreapi'
+    build:
+      context: .
+      dockerfile: api.dockerfile
+    ports:
+     - "9000:9000"
+    image: aspnetcoreapi
+    depends_on:
+     - "sqlserverlinux"
+    networks:
+      - aspnetcoreapp-network
+    links:
+      - "sqlserverlinux:database"
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge
+
+

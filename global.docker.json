@@ -1,0 +1,10 @@
+﻿{
+  "projects": [ 
+   "aspnetcoreapi",
+   "aspnetcoreapp",
+   "MicroServices.DotNETCore.Domain.CORE"
+ ],
+  "sdk": {
+    "version": "1.0.0-preview2-003131"
+  }
+}	
